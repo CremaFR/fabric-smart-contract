@@ -26,12 +26,12 @@ const fs = require('fs-extra');
 describe('Account-account@1.1.0' , () => {
 
     const gateway = new fabricNetwork.Gateway();
-    const wallet = new fabricNetwork.FileSystemWallet('/Users/thomasbrillard/Documents/Project/fabric/fabcar-blockchain-sample/web-app/server/wallet');
+    const wallet = new fabricNetwork.FileSystemWallet('/Users/thomasbrillard/.fabric-vscode/local_fabric/wallet');
     let connectionProfile;
     let identityName;
     
     before(async () => {
-        const connectionProfilePath = '/Users/thomasbrillard/Documents/Project/fabric/fabcar-blockchain-sample/web-app/server/mychannel_fabcar_profile.json';
+        const connectionProfilePath = '/Users/thomasbrillard/.fabric-vscode/local_fabric/connection.json';
 
         const connectionProfileContents = await fs.readFile(connectionProfilePath, 'utf8');
         if (connectionProfilePath.endsWith('.json')) {
@@ -58,30 +58,29 @@ describe('Account-account@1.1.0' , () => {
     afterEach(async () => {
         gateway.disconnect();
     });
-
-    it('getAccount', async () => {
-        // TODO: Update with parameters of transaction
-        const args = [''];
-
-        const response = await submitTransaction('getAccount', args); // Returns buffer of transaction return value
-        // TODO: Update with return value of transaction
-        // assert.equal(JSON.parse(response.toString()), undefined);
-    }).timeout(10000);
-
     it('addAccount', async () => {
         // TODO: Update with parameters of transaction
-        const args = [''];
+        const args = ['TEST001', 'EUR'];
 
         const response = await submitTransaction('addAccount', args); // Returns buffer of transaction return value
         // TODO: Update with return value of transaction
         // assert.equal(JSON.parse(response.toString()), undefined);
+        console.log(response.toString());
+        
+        const args2 = ['ACCOUNT1'];
+
+        const response2 = await submitTransaction('getAccount', args2); // Returns buffer of transaction return value
+
+        assert.equal(JSON.parse(response2.toString()), {"accountRef":"TEST001","currency":"EUR","active":true});
+
+
     }).timeout(10000);
 
     it('revoke', async () => {
         // TODO: Update with parameters of transaction
         const args = [''];
 
-        const response = await submitTransaction('revoke', args); // Returns buffer of transaction return value
+        // const response = await submitTransaction('revoke', args); // Returns buffer of transaction return value
         // TODO: Update with return value of transaction
         // assert.equal(JSON.parse(response.toString()), undefined);
     }).timeout(10000);
