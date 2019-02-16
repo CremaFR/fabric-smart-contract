@@ -61,23 +61,12 @@ describe('Account-account@1.2.0' , () => {
     it('addAccount', async () => {
         // TODO: Update with parameters of transaction
         const args = ['TEST001', 'EUR'];
-
-        const response = await submitTransaction('addAccount', args); // Returns buffer of transaction return value
-        // TODO: Update with return value of transaction
-        // assert.equal(JSON.parse(response.toString()), undefined);
-        console.log("response");
-        console.log(response.toString());
-
-        const response2 = await submitTransaction('getAccount', ['ACCOUNT1']); // Returns buffer of transaction return value
-        console.log("JSON.parse(response2.toString())");
-        console.log(typeof { lol : 'lol'} );
-        console.log(JSON.parse(response2));
-        console.log(typeof response2.toString());
-        console.log(typeof JSON.parse(response2));
-        console.log(JSON.parse(response2).accountRef);
-        console.log(JSON.parse(response2.toString()).active);
+        const nbBefore = await submitTransaction('getAccountNumber', []); // Returns buffer of transaction return value        
+        const response = await submitTransaction('addAccount', args); 
+        const nbAfter = await submitTransaction('getAccountNumber', []); // Returns buffer of transaction return value
         
-        assert.equal(JSON.parse(response2).active, true);
+        // fuck js sometimes 🙈🙈
+        assert.equal(parseInt(JSON.parse(nbBefore.toString()))+1, parseInt(JSON.parse(nbAfter.toString()))); 
 
 
     }).timeout(10000);
@@ -86,19 +75,11 @@ describe('Account-account@1.2.0' , () => {
         // TODO: Update with parameters of transaction
         const args = ['ACCOUNT1'];
 
-        const response = await submitTransaction('revoke', args); // Returns buffer of transaction return value
-        // TODO: Update with return value of transaction
-
-
+        const response = await submitTransaction('revoke', args); //set active to false
         const response2 = await submitTransaction('getAccount', ['ACCOUNT1']); // Returns buffer of transaction return value
 
-        
-        console.log("response revoke");
-        // console.log(JSON.parse(response.toString()));
-        console.log(response2.toString());
-        
-        // assert.equal(response2.toString(), "1");
-        // assert.equal(JSON.parse(response.toString()), undefined);
+         // fuck js parsing a parsed json to get a real object 🙊🤢
+        assert.equal(JSON.parse(JSON.parse(response2.toString())).active, false);
 
     }).timeout(10000);
 
