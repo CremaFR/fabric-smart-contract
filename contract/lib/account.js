@@ -18,6 +18,12 @@ class Account extends Contract {
         super();
     }
 
+
+    // Not called during creation 
+    async init(ctx) {
+        await ctx.stub.putState('accountNumber', Buffer.from('0'));
+    }
+
     async getAccount(ctx, accountNumber) {
         const accountAsBytes = await ctx.stub.getState(accountNumber); 
         if (!accountAsBytes || accountAsBytes.length === 0) {
@@ -40,9 +46,12 @@ class Account extends Contract {
             active : true
         };
         accountNumber++;
-        await ctx.stub.putState(`ACCOUNT${accountNumber}`, Buffer.from(JSON.stringify(account)));
+        await ctx.stub.putState(`ACCOUNT${accountNumber}`, Buffer.from(account));
         await ctx.stub.putState('accountNumber', Buffer.from(accountNumber.toString()));
+
         console.info('============= END : Create Account ===========');
+        return accountNumber;
+
     }
 
     async revoke(ctx, accountNumber) {
@@ -57,6 +66,15 @@ class Account extends Contract {
 
         await ctx.stub.putState(accountNumber, Buffer.from(JSON.stringify(account)));
         console.info('============= END : changeCarOwner ===========');
+    }
+    
+    async getAccountNumber(ctx) {
+        const accountAsBytes = await ctx.stub.getState('accountNumber'); 
+        if (!accountAsBytes || accountAsBytes.length === 0) {
+            throw new Error(`${accountNumber} does not exist`);
+        }
+        console.log(accountAsBytes.toString());
+        return accountAsBytes.toString();
     }
 
 }

@@ -23,7 +23,7 @@ const fabricNetwork = require('fabric-network');
 const yaml = require('js-yaml');
 const fs = require('fs-extra');
 
-describe('Account-account@1.1.0' , () => {
+describe('Account-account@1.2.0' , () => {
 
     const gateway = new fabricNetwork.Gateway();
     const wallet = new fabricNetwork.FileSystemWallet('/Users/thomasbrillard/.fabric-vscode/local_fabric/wallet');
@@ -65,24 +65,41 @@ describe('Account-account@1.1.0' , () => {
         const response = await submitTransaction('addAccount', args); // Returns buffer of transaction return value
         // TODO: Update with return value of transaction
         // assert.equal(JSON.parse(response.toString()), undefined);
+        console.log("response");
         console.log(response.toString());
+
+        const response2 = await submitTransaction('getAccount', ['ACCOUNT1']); // Returns buffer of transaction return value
+        console.log("JSON.parse(response2.toString())");
+        console.log(typeof { lol : 'lol'} );
+        console.log(JSON.parse(response2));
+        console.log(typeof response2.toString());
+        console.log(typeof JSON.parse(response2));
+        console.log(JSON.parse(response2).accountRef);
+        console.log(JSON.parse(response2.toString()).active);
         
-        const args2 = ['ACCOUNT1'];
-
-        const response2 = await submitTransaction('getAccount', args2); // Returns buffer of transaction return value
-
-        assert.equal(JSON.parse(response2.toString()), {"accountRef":"TEST001","currency":"EUR","active":true});
+        assert.equal(JSON.parse(response2).active, true);
 
 
     }).timeout(10000);
 
     it('revoke', async () => {
         // TODO: Update with parameters of transaction
-        const args = [''];
+        const args = ['ACCOUNT1'];
 
-        // const response = await submitTransaction('revoke', args); // Returns buffer of transaction return value
+        const response = await submitTransaction('revoke', args); // Returns buffer of transaction return value
         // TODO: Update with return value of transaction
+
+
+        const response2 = await submitTransaction('getAccount', ['ACCOUNT1']); // Returns buffer of transaction return value
+
+        
+        console.log("response revoke");
+        // console.log(JSON.parse(response.toString()));
+        console.log(response2.toString());
+        
+        // assert.equal(response2.toString(), "1");
         // assert.equal(JSON.parse(response.toString()), undefined);
+
     }).timeout(10000);
 
     async function submitTransaction(functionName, args) {
