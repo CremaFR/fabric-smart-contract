@@ -17,5 +17,8 @@ export default {
   },
   queryAllCars() {
     return Api().get('queryAllCars')
+  },
+  queryAllAccounts(){
+    return Api().get('accounts')
   }
 }

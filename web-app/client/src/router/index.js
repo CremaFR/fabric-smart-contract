@@ -5,8 +5,9 @@ import Home from '@/components/Home'
 import CreateCar from '@/components/CreateCar'
 import ChangeCarOwner from '@/components/ChangeCarOwner'
 import QueryAllCars from '@/components/QueryAllCars'
+import Accounts from '@/components/Accounts'
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [
@@ -29,6 +30,11 @@ export default new Router({
       path: '/queryAllCars',
       name: 'QueryAllCars',
       component: QueryAllCars
+    },
+    {
+      path: '/accounts',
+      name: 'accounts',
+      component: Accounts
     }
   ]
 })

@@ -5,8 +5,9 @@
         <p><router-link to="/">Home</router-link>&nbsp;          
         <router-link to="/createCar">Create Car</router-link>&nbsp;
         <router-link to="/changeCarOwner">Change Car Owner</router-link>&nbsp;
-        <router-link to="/QueryAllCars">Query All Cars</router-link></p>
-      
+        <router-link to="/QueryAllCars">Query All Cars</router-link>
+        <router-link to="/accounts">Query All account</router-link></p>
+
       <router-view></router-view>
     </div>
 </template>

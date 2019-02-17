@@ -19,9 +19,14 @@ class Account extends Contract {
     }
 
 
-    // Not called during creation 
-    async init(ctx) {
+    // careful for update. comment this or add check if accountNumber is defined???
+    async instantiate(ctx) {
         await ctx.stub.putState('accountNumber', Buffer.from('0'));
+    }
+
+    // useful?
+    async afterTransaction(ctx,result){
+        // emit events etc...
     }
 
     async getAccount(ctx, accountNumber) {
@@ -30,7 +35,7 @@ class Account extends Contract {
             throw new Error(`${accountNumber} does not exist`);
         }
         console.log(accountAsBytes.toString());
-        return accountAsBytes.toString();
+        return accountAsBytes; //removed toString for parsing tests.
     }
 
     async addAccount(ctx, accountRef, currency) {
@@ -46,10 +51,13 @@ class Account extends Contract {
             active : true
         };
         accountNumber++;
-        await ctx.stub.putState(`ACCOUNT${accountNumber}`, Buffer.from(account));
+        await ctx.stub.putState(`ACCOUNT${accountNumber}`, Buffer.fromJSON.stringify(account));
         await ctx.stub.putState('accountNumber', Buffer.from(accountNumber.toString()));
 
         console.info('============= END : Create Account ===========');
+
+        // needed if no replication?? 
+        ctx.stub.SetEvent("ACCOUND_ADDED", Buffer.fromJSON.stringify(account));
         return accountNumber;
 
     }

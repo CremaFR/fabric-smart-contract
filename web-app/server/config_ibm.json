@@ -1,0 +1,9 @@
+{
+    "connection_file": "mychannel_fabcar_profile.json",
+    "appAdmin": "app-admin",
+    "appAdminSecret": "app-adminpw",
+    "orgMSPID": "org1msp",
+    "caName": "84ce63d5d8cb4a8fbd2d318695dde2dc-ca060ef6.ubetterwork.us-south.containers.appdomain.cloud:7054",
+    "userName": "user1",
+    "gatewayDiscovery": { "enabled": true, "asLocalhost": false }
+}

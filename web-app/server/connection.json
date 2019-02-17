@@ -6,7 +6,9 @@
         "connection": {
             "timeout": {
                 "peer": {
-                    "endorser": "300"
+                    "endorser": "300",
+                    "eventHub": "300",
+                    "eventReg": "300"
                 },
                 "orderer": "300"
             }
@@ -29,7 +31,7 @@
                 "peer0.org1.example.com"
             ],
             "certificateAuthorities": [
-                "ca.example.com"
+                "ca.org1.example.com"
             ]
         }
     },
@@ -40,13 +42,14 @@
     },
     "peers": {
         "peer0.org1.example.com": {
-            "url": "grpc://localhost:17051"
+            "url": "grpc://localhost:17051",
+            "eventUrl": "grpc://localhost:17053"
         }
     },
     "certificateAuthorities": {
-        "ca.example.com": {
+        "ca.org1.example.com": {
             "url": "http://localhost:17054",
-            "caName": "ca.example.com"
+            "caName": "ca.org1.example.com"
         }
     }
 }
