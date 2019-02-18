@@ -35,7 +35,7 @@ class Account extends Contract {
             throw new Error(`${accountNumber} does not exist`);
         }
         console.log(accountAsBytes.toString());
-        return accountAsBytes; //removed toString for parsing tests.
+        return accountAsBytes.toString(); 
     }
 
     async addAccount(ctx, accountRef, currency) {
@@ -51,13 +51,13 @@ class Account extends Contract {
             active : true
         };
         accountNumber++;
-        await ctx.stub.putState(`ACCOUNT${accountNumber}`, Buffer.fromJSON.stringify(account));
+        await ctx.stub.putState(`ACCOUNT${accountNumber}`, Buffer.from(JSON.stringify(account)));
         await ctx.stub.putState('accountNumber', Buffer.from(accountNumber.toString()));
 
         console.info('============= END : Create Account ===========');
 
         // needed if no replication?? 
-        ctx.stub.SetEvent("ACCOUND_ADDED", Buffer.fromJSON.stringify(account));
+        ctx.stub.setEvent("ACCOUND_ADDED", Buffer.from(JSON.stringify(account)));
         return accountNumber;
 
     }

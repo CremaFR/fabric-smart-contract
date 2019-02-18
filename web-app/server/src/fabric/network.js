@@ -23,22 +23,7 @@ const ccp = JSON.parse(ccpJSON);
 exports.createCar = async function(key, make, model, color, owner) {
     try {
 
-        var response = {};
-
-        // Create a new file system based wallet for managing identities.
-        const walletPath = path.join(process.cwd(), '/wallet');
-        const wallet = new FileSystemWallet(walletPath);
-        console.log(`Wallet path: ${walletPath}`);
-
-        // Check to see if we've already enrolled the user.
-        const userExists = await wallet.exists(userName);
-        if (!userExists) {
-            console.log('An identity for the user ' + userName + ' does not exist in the wallet');
-            console.log('Run the registerUser.js application before retrying');
-            response.error = 'An identity for the user ' + userName + ' does not exist in the wallet. Register ' + userName + ' first';
-            return response;
-        }
-
+        let response = {};
         // Create a new gateway for connecting to our peer node.
         const gateway = new Gateway();
         await gateway.connect(ccp, { wallet, identity: userName, discovery: gatewayDiscovery });
@@ -153,6 +138,40 @@ exports.queryAllCars = async function() {
 
         return result;
 
+    } catch (error) {
+        console.error(`Failed to evaluate transaction: ${error}`);
+        response.error = error.message;
+        return response;
+    }
+};
+
+exports.connectChannelEvent = async function () {
+    try {
+        
+        var response = {};
+        
+        // Create a new file system based wallet for managing identities.
+        const walletPath = path.join(process.cwd(), '/wallet');
+        const wallet = new FileSystemWallet(walletPath);
+        console.log(`Wallet path: ${walletPath}`);
+        
+        // Check to see if we've already enrolled the user.
+        const userExists = await wallet.exists(userName);
+        if (!userExists) {
+            console.log('An identity for the user ' + userName + ' does not exist in the wallet');
+            console.log('Run the registerUser.js application before retrying');
+            response.error = 'An identity for the user ' + userName + ' does not exist in the wallet. Register ' + userName + ' first';
+            return response;
+        }
+        
+        // Create a new gateway for connecting to our peer node.
+        const gateway = new Gateway();
+        await gateway.connect(ccp, { wallet, identity: userName, discovery: gatewayDiscovery });
+        
+        // Get the network (channel) our contract is deployed to.
+        const network = await gateway.getNetwork('mychannel');
+        return network.getChannel('mychannel').newChannelEventHub();
+        
     } catch (error) {
         console.error(`Failed to evaluate transaction: ${error}`);
         response.error = error.message;
